@@ -1,0 +1,20 @@
+{
+    "name": "celionatti/nattiframework",
+    "description": "Mini PHP MVC Framework",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        },
+        "files": []
+    },
+    "authors": [
+        {
+            "name": "celio natti",
+            "email": "celionatti@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
