@@ -32,6 +32,21 @@ class Model
         }
     }
 
+    public function attributes(): array
+    {
+        return [];
+    }
+
+    public function labels(): array
+    {
+        return [];
+    }
+
+    public function getLabel($attribute)
+    {
+        return $this->labels()[$attribute] ?? $attribute;
+    }
+
     public function rules(): array
     {
         return [];
@@ -64,10 +79,27 @@ class Model
                 }
                 /** Match Validation */
                 if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
-                    $this->addError($attribute, self::RULE_MATCH, ['match' => $rule['match']]);
+                    $rule['match'] = $this->getLabel($rule['match']);
+                    $this->addError($attribute, self::RULE_MATCH, $rule);
                 }
                 /** Unique Validation */
+                if ($ruleName === self::RULE_UNIQUE) {
+                    $className = $rule['class'];
+                    $uniqueAttr = $rule['attribute'] ?? $attribute;
+                    $tableName = $className::tableName();
+                    $db = Application::$app->database;
+                    $statement = $db->prepare("SELECT * FROM $tableName WHERE $uniqueAttr = :$uniqueAttr");
+                    $statement->bindValue(":$uniqueAttr", $value);
+                    $statement->execute();
+                    $record = $statement->fetchObject();
+                    if ($record) {
+                        $this->addError($attribute, self::RULE_UNIQUE, ['field' => $this->getLabel($attribute)]);
+                    }
+                }
                 /** Number Validation */
+                if ($ruleName === self::RULE_NUMBER && !is_numeric($value)) {
+                    $this->addError($attribute, self::RULE_NUMBER);
+                }
             }
         }
         return empty($this->errors);

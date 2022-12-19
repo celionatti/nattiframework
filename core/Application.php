@@ -19,6 +19,7 @@ use app\core\Router;
     public Request $request;
     public Response $response;
     public Database $database;
+    public Session $session;
     public static Application $app;
     public Controller $controller;
 
@@ -26,6 +27,7 @@ use app\core\Router;
     {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
+        $this->session = new Session();
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);

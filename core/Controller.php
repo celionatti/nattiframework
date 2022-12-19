@@ -14,6 +14,11 @@ use app\core\Application;
  {
     public string $layout = "main";
 
+    public function __construct()
+    {
+        $this->onConstruct();
+    }
+
     public function setLayout($layout)
     {
         $this->layout = $layout;
@@ -23,4 +28,7 @@ use app\core\Application;
     {
         return Application::$app->router->renderView($view, $params);
     }
+
+    public function onConstruct()
+    {}
  }
