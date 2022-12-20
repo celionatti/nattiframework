@@ -7,13 +7,13 @@ namespace app\models;
 use app\core\database\DbModel;
 
 /**
- * Class RegisterModel
+ * Class User
  * 
  * @author celio natti <celionatti@gmail.com>
  * @package app\models
  */
 
- class User extends DbModel
+ class User extends UserModel
  {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -26,9 +26,14 @@ use app\core\database\DbModel;
     public string $password = "";
     public string $confirmPassword = "";
 
-    public function tableName(): string
+    public static function tableName(): string
     {
         return 'users';
+    }
+
+    public static function primaryKey(): string
+    {
+        return "id"; // You can change if you want. E.g user_id.
     }
 
     public function attributes(): array
@@ -63,6 +68,11 @@ use app\core\database\DbModel;
             'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
             'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']],
         ];
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 
  }

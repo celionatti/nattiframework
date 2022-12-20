@@ -6,7 +6,10 @@
  * Time: 09:10 PM
  */
 
+
 use app\core\form\Form;
+
+/** @var $model \app\models\User */
 
 ?>
 
