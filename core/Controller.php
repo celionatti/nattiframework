@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\core\Application;
+use app\core\middlewares\BaseMiddleware;
 
 /**
  * Class Controller
@@ -13,6 +14,10 @@ use app\core\Application;
  class Controller
  {
     public string $layout = "main";
+    public string $action = "";
+
+    /** @var \app\core\middlewares\BaseMiddleware[] */
+    public array $middlewares = [];
 
     public function __construct()
     {
@@ -27,6 +32,20 @@ use app\core\Application;
     public function render($view, $params = [])
     {
         return Application::$app->router->renderView($view, $params);
+    }
+
+    public function registerMiddleware(BaseMiddleware $middleware)
+    {
+        $this->middlewares[] = $middleware;
+    }
+
+    /**
+     * Summary of getMiddlewares
+     * @return \app\core\middlewares\BaseMiddleware[]
+     */
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
     }
 
     public function onConstruct()
